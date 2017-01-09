@@ -27,13 +27,18 @@ public class QueueServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
-      /* DB db =new DB();
+        DB db = null;
+        try {
+            db = new DB();
+            List<queue> list = db.getQueueNumbers();
+            queue temp = null;
+            temp.setQueueNo(list.get(list.size()-1).getQueueNo()+1);
+            if(db.createQueueNumber(temp)){
 
-        if (request.getParameter("button1") != null) {
-            db.createQueueNumber();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        request.getRequestDispatcher("/WEB-INF/some-result.jsp").forward(request, response);
-    */
     }
 }
