@@ -327,6 +327,14 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+<%
+    int queueNo = 0;
+    DB db = new DB();
+    List<queue> list = db.getQueueNumbers();
+    if(list.size()>0){
+        queueNo = list.get(list.size()-1).getQueueNo();
+    }
+%>
 <body>
 
 <!-- Navigation -->
@@ -371,15 +379,12 @@
 
 <div class="counter" data-type="simple-digits">
     <div class="digit" data-digit-from="" data-digit-to=""><span class="current">0</span></div>
-    <div class="digit" data-digit-from="" data-digit-to=""><span class="current">0</span></div>
-    <div class="digit" data-digit-from="" data-digit-to=""><span class="current">0</span></div>
-    <div class="digit" data-digit-from="" data-digit-to=""><span class="current">0</span></div>
-    <div class="digit" data-digit-from="" data-digit-to=""><span class="current">0</span></div>
+
 
 
 </div>
 <div class="center">
-    <form action=""method="post"><button type="submit" name="button1" value="button1" class="collect">Collect Queue Number</button></form>
+    <form action=""method="post"><input type="submit" name="button1" value="button1" class="collect">Collect Queue Number</input></form>
     <h2>Your Queue Position:<span style="color:red;font-weight:bold"> placeholder</span></h2>
     <h2>Estimated Waiting Time:<span style="color:green;font-weight:bold"> placeholder</span></h2>
     <h2>Appointed Doctor:<span style="color:blue;font-weight:bold"> placeholder</span></h2>
