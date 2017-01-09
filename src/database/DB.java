@@ -1,4 +1,5 @@
 
+
 /**
  * Created by user on 14/12/2016.
  */
@@ -64,15 +65,36 @@ public class DB {
             ResultSet rs = pstmt.executeQuery();
             if (rs != null && rs.next()) {
                 q = new queue();
-                q.setPatientId(rs.getInt(1));
-                q.setDoctorName(rs.getString(2));
-                //q.set(rs.getString(3));
+                q.setQueueNo(rs.getInt(1));
+                q.setPatientId(rs.getInt(2));
+                q.setDoctorName(rs.getString(3));
             }
             pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return q;
+    }
+
+    public List<queue> getQueueNumbers() {
+        String sql = "select queueNo from queue ";
+        List<queue> list = new ArrayList<>();
+        try {
+            getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs != null && rs.next()) {
+                queue q = new queue();
+                q.setQueueNo(rs.getInt(1));
+                q.setPatientId(rs.getInt(2));
+                q.setDoctorName(rs.getString(3));
+                list.add(q);
+            }
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
