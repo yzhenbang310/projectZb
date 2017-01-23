@@ -22,7 +22,7 @@ import java.util.Random;
  */
 
 
-@WebServlet(name="Queue Servlet", urlPatterns ="/queue")
+@WebServlet(name="Queue Servlet", urlPatterns ="/queuemain")
 public class QueueServlet extends HttpServlet {
 
 
@@ -34,11 +34,17 @@ public class QueueServlet extends HttpServlet {
             queue temp = null;
             temp.setQueueNo(list.get(list.size()-1).getQueueNo()+1);
             if(db.createQueueNumber(temp)){
-
+                takeQueueNumber();
+                request.getRequestDispatcher("QueueMain.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void takeQueueNumber() {
+        
 
     }
 }
