@@ -33,6 +33,7 @@ public class QueueServlet extends HttpServlet {
             List<queue> list = db.getQueueNumbers();
             queue temp = null;
             temp.setQueueNo(list.get(list.size()-1).getQueueNo()+1);
+            //String submit = request.getParameter("submitQueue");
             if(db.createQueueNumber(temp)){
                 takeQueueNumber();
                 request.getRequestDispatcher("QueueMain.jsp").forward(request, response);
@@ -43,8 +44,26 @@ public class QueueServlet extends HttpServlet {
 
     }
 
-    private void takeQueueNumber() {
-        
+   private void takeQueueNumber() {
+
+            int patientId = request.getParameter("patientId");
+            int patientId = DB.insert(patientId);
+
+            DB.insert(patientId);
+            queue que = DB.retrieveByPatientId(patientId);
+            int id = que.getPatientId();
+
+            int amountBefore = DB.retrieveQueuesTodayUnfinished();
+            double timeRemaining = amountBefore * 5min;
+            DateTime now = new DateTime();
+            timeRemaining = now + timeRemaining;
+
+            response.setparameter("id",id);
+            response.setparameter("nric",nric);
+            response.setparameter("timeToQueue",timeRemaining);
 
     }
-}
+
+   }
+
+
