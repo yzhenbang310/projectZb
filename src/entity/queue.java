@@ -5,6 +5,7 @@ package entity;
  */
 public class queue {
 
+    private int id;
     private int queueNo;
     private int patientId;
     private String doctorName;
@@ -28,6 +29,14 @@ public class queue {
 
     public void setPatientId(int patientId) {
         this.patientId = patientId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 
