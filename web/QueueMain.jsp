@@ -1,4 +1,6 @@
-<%--
+<%@ page import="java.util.List" %>
+<%@ page import="entity.queue" %>
+<%@ page import="database.DB" %><%--
   Created by IntelliJ IDEA.
   User: 152595y
   Date: 1/23/2017
@@ -244,7 +246,11 @@
 
 
 </head>
-
+<%
+    DB db = new DB();
+    List<queue> list = db.getAllQueue();
+    queue q = list.get(list.size()-1);
+%>
 <body>
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -289,16 +295,31 @@
     <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
     <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
     <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
+    <%
+        int no;
+        if(list.isEmpty()){
+            no = 0;
+        }else{
+            no = list.get(list.size()-1).getQueueNo();
+        }
+    %>
+    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no%></span></div>
 </div>
 <div class="center">
-    <form action=""method="post"><input type="submit" name="Collect Queue Number" value="Collect Queue Number" class="collect"></form>
+    <form action="/queuemain"method="post"><input type="submit" name="Collect Queue Number" value="Collect Queue Number" class="collect"></form>
 
-
-
-    <h2>Your Queue Position:<span style="color:red;font-weight:bold"> placeholder</span></h2>
-    <h2>Estimated Waiting Time:<span style="color:green;font-weight:bold"> placeholder</span></h2>
-    <h2>Appointed Doctor:<span style="color:blue;font-weight:bold"> placeholder</span></h2>
+</div>
+<div style="text-align: center">
+    <h2>Your Queue Position: <%=q.getQueueNo()%></h2>
+    <h2>Estimated Waiting Time: </h2>
+    <h2>Appointed Doctor: <%=q.getDoctorName() %></h2>
+    <%
+        for(queue qq: list){
+    %>
+    <p><%=qq.getQueueNo()%></p>
+    <%
+        }
+    %>
 </div>
 </body>
 </html>
