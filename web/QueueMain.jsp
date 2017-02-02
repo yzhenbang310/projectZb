@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="entity.queue" %>
-<%@ page import="database.DB" %><%--
+<%@ page import="database.DB" %>
+<%@ page import="java.text.DecimalFormat" %><%--
   Created by IntelliJ IDEA.
   User: 152595y
   Date: 1/23/2017
@@ -248,6 +249,7 @@
 </head>
 <%
     DB db = new DB();
+    DecimalFormat df = new DecimalFormat("0000");
     List<queue> list = db.getAllQueue();
     queue q = null;
     if(list.size()>0){
@@ -295,18 +297,19 @@
 
 <!-- /.container -->
 <div class="counter" data-type="simple-digits">
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current">0</span></div>
+
     <%
-        int no;
+        String no;
         if(list.isEmpty()){
-            no = 0;
+            no = "0000";
         }else{
-            no = list.get(list.size()-1).getQueueNo();
+            no = String.valueOf(df.format(list.get(list.size()-1).getQueueNo()));
         }
     %>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no%></span></div>
+    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(0)%></span></div>
+    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(1)%></span></div>
+    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(2)%></span></div>
+    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(3)%></span></div>
 </div>
 <div class="center">
     <form action="/queuemain"method="post"><input type="submit" name="Collect Queue Number" value="Collect Queue Number" class="collect"></form>
