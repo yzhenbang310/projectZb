@@ -5,13 +5,13 @@
  */
 package database;
 
+import entity.queue;
+
 import java.sql.*;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-
-import entity.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DB {
     Connection con;
@@ -54,28 +54,6 @@ public class DB {
             e.printStackTrace();
         }
         return success;
-    }
-
-    public queue getQueueNumber(int queueNo) {
-        String sql = "select * from queue where queueNo = ?";
-       queue q = null;
-        try {
-            getConnection();
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1,queueNo);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs != null && rs.next()) {
-                q = new queue();
-                q.setQueueNo(rs.getInt(1));
-                q.setPatientId(rs.getInt(2));
-                q.setDoctorName(rs.getString(3));
-                q.setId(rs.getInt(4));
-            }
-            pstmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return q;
     }
 
     public List<queue> getAllQueue() {

@@ -8,12 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 
@@ -36,7 +32,7 @@ public class QueueServlet extends HttpServlet {
             if(qList.isEmpty()){
                 no = 1;
             }else{
-                no = qList.get(1).getQueueNo()+1;
+                no = qList.get(qList.size()-1).getQueueNo()+1;
             }
             temp.setQueueNo(no);
             temp.setDoctorName("fda");

@@ -249,7 +249,10 @@
 <%
     DB db = new DB();
     List<queue> list = db.getAllQueue();
-    queue q = list.get(list.size()-1);
+    queue q = null;
+    if(list.size()>0){
+        q = list.get(list.size()-1);
+    }
 %>
 <body>
 <!-- Navigation -->
@@ -310,6 +313,9 @@
 
 </div>
 <div style="text-align: center">
+    <%
+        if(list.size()>0){
+    %>
     <h2>Your Queue Position: <%=q.getQueueNo()%></h2>
     <h2>Estimated Waiting Time: </h2>
     <h2>Appointed Doctor: <%=q.getDoctorName() %></h2>
@@ -317,8 +323,8 @@
         for(queue qq: list){
     %>
     <p><%=qq.getQueueNo()%></p>
-    <%
-        }
+    <%  }
+      }
     %>
 </div>
 </body>
