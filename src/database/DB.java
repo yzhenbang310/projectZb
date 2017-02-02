@@ -33,7 +33,7 @@ public class DB {
     }
 
     public boolean createQueueNumber(queue q){
-        String sql = "insert into appointment VALUES(?,?,?)";
+        String sql = "insert into queue VALUES(?,?,?,?)";
         boolean success = false;
         //java.util.Date sDate = null;
         try {
@@ -44,6 +44,7 @@ public class DB {
             pstmt.setInt(1,q.getQueueNo());
             pstmt.setInt(2,q.getPatientId());
             pstmt.setString(3,q.getDoctorName());
+            pstmt.setInt(4,q.getId());
 
             if(pstmt.executeUpdate()==1){
                 success = true;
@@ -68,6 +69,7 @@ public class DB {
                 q.setQueueNo(rs.getInt(1));
                 q.setPatientId(rs.getInt(2));
                 q.setDoctorName(rs.getString(3));
+                q.setId(rs.getInt(4));
             }
             pstmt.close();
         } catch (SQLException e) {
@@ -76,19 +78,36 @@ public class DB {
         return q;
     }
 
-    public List<queue> getQueueNumbers() {
-        String sql = "select queueNo from queue ";
+    public List<queue> getAllQueue() {
+        String sql = "select * from queue";
         List<queue> list = new ArrayList<>();
         try {
             getConnection();
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-            if (rs != null && rs.next()) {
+            while (rs != null && rs.next()) {
                 queue q = new queue();
                 q.setQueueNo(rs.getInt(1));
                 q.setPatientId(rs.getInt(2));
                 q.setDoctorName(rs.getString(3));
                 list.add(q);
+            }
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Integer> getQueueNumbers() {
+        String sql = "select queueNo from queue ";
+        List<Integer> list = new ArrayList<>();
+        try {
+            getConnection();
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs != null && rs.next()) {
+                list.add(rs.getInt(1));
             }
             pstmt.close();
         } catch (SQLException e) {
