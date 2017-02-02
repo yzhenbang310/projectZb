@@ -38,7 +38,7 @@
             padding-top: 70px;
             /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
         }
-        .center{
+        .center01{
             margin:auto;
             width: 60%;
             border: 3px solid #000000;
@@ -46,6 +46,11 @@
             text-align:center;
         }
 
+        .center{
+          margin:auto;
+          text-align:center;
+      }
+        
         .collect{
             background-color: #af0e13;
             border: none;
@@ -320,7 +325,7 @@
         if(list.size()>0){
     %>
     <h2>Your Queue Position: <%=q.getQueueNo()%></h2>
-    <h2>Estimated Waiting Time: </h2>
+    <h2>Estimated Waiting Time: <%=q.getQueueNo()*20%> minutes</h2>
     <h2>Appointed Doctor: <%=q.getDoctorName() %></h2>
     <%
         for(queue qq: list){
