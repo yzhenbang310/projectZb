@@ -1,7 +1,9 @@
-<%@ page import="java.util.List" %>
-<%@ page import="entity.queue" %>
 <%@ page import="database.DB" %>
-<%@ page import="java.text.DecimalFormat" %><%--
+<%@ page import="entity.appointment" %>
+<%@ page import="entity.patient" %>
+<%@ page import="entity.queue" %>
+<%@ page import="java.text.DecimalFormat" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: 152595y
   Date: 1/23/2017
@@ -38,19 +40,13 @@
             padding-top: 70px;
             /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
         }
-        .center01{
+        .center{
             margin:auto;
-            width: 60%;
             border: 3px solid #000000;
             padding: 10px;
             text-align:center;
         }
 
-        .center{
-          margin:auto;
-          text-align:center;
-      }
-        
         .collect{
             background-color: #af0e13;
             border: none;
@@ -253,8 +249,15 @@
 
 </head>
 <%
+    patient patient = (entity.patient) session.getAttribute("user");
     DB db = new DB();
     DecimalFormat df = new DecimalFormat("0000");
+    appointment app = db.getTodayApointment(patient.getPatientId());
+    queue today = (queue) request.getAttribute("todayQueue");
+    int appointmentId = 0;
+    if(app!=null){
+        appointmentId=app.getAppointmentId();
+    }
     List<queue> list = db.getAllQueue();
     queue q = null;
     if(list.size()>0){
@@ -262,37 +265,8 @@
     }
 %>
 <body>
-<!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Home</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="#">Make/Change Appointment</a>
-                </li>
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Support</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
+<%@ include file="navigationLogin.html"%>
+
 <!-- jQuery Version 1.11.1 -->
 <script src="js/jquery.js"></script>
 
@@ -301,39 +275,60 @@
 <!-- Page Content -->
 
 <!-- /.container -->
-<div class="counter" data-type="simple-digits">
+<div class="container">
+    <div class="row">
 
-    <%
-        String no;
-        if(list.isEmpty()){
-            no = "0000";
-        }else{
-            no = String.valueOf(df.format(list.get(list.size()-1).getQueueNo()));
-        }
-    %>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(0)%></span></div>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(1)%></span></div>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(2)%></span></div>
-    <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(3)%></span></div>
-</div>
-<div class="center">
-    <form action="/queuemain"method="post"><input type="submit" name="Collect Queue Number" value="Collect Queue Number" class="collect"></form>
+        <div class="col-md-3">
+            <p class="lead">Welcome <%=patient.getName()%></p>
+            <div class="list-group">
+                <a href="viewAppointment.jsp" class="list-group-item">View Appointment</a>
+                <a href="makeAppointment.jsp" class="list-group-item">Make Appointment</a>
+                <a href="#" class="list-group-item active">Queue</a>
+                <a href="/logout" class="list-group-item">Logout</a>
+            </div>
+        </div>
 
+        <div class="col-md-9">
+            <div class="counter" data-type="simple-digits">
+                <%
+                    String no;
+                    if(list.isEmpty()){
+                        no = "0000";
+                    }else{
+                        no = String.valueOf(df.format(list.get(list.size()-1).getQueueNo()));
+                    }
+                %>
+                <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(0)%></span></div>
+                <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(1)%></span></div>
+                <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(2)%></span></div>
+                <div class="digit" data-digit-from="1" data-digit-to="9"><span class="current"><%=no.charAt(3)%></span></div>
+            </div>
+            <div class="center">
+                <form action="/queuemain"method="post">
+                    <input type="submit" name="Collect Queue Number" value="Collect Queue Number" class="collect">
+                    <input type="hidden" name="todayAppointment" value=<%=appointmentId%>>
+                    <%
+                        if(today!=null){
+                    %>
+                    <h2>Your Queue Position: <%=today.getQueueNo()%></h2>
+                    <%
+                        appointment display = db.getApointmentById(today.getAppointmentId());
+                        String[] split = display.getDate().split(" ");
+                        String time = split[1];
+                        String doctor = db.getStaffById(display.getDoctorId()).getName();
+                    %>
+                    <h2>Estimated Appointment Time: <%=time%></h2>
+                    <h2>Appointed Doctor: <%=doctor%></h2>
+                    <%
+                        }
+                    %>
+                </form>
+            </div>
+        </div>
+
+    </div>
 </div>
-<div style="text-align: center">
-    <%
-        if(list.size()>0){
-    %>
-    <h2>Your Queue Position: <%=q.getQueueNo()%></h2>
-    <h2>Estimated Waiting Time: <%=q.getQueueNo()*20%> minutes</h2>
-    <h2>Appointed Doctor: <%=q.getDoctorName() %></h2>
-    <%
-        for(queue qq: list){
-    %>
-    <p><%=qq.getQueueNo()%></p>
-    <%  }
-      }
-    %>
-</div>
+
+
 </body>
 </html>
